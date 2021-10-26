@@ -1,0 +1,19 @@
+{
+  "name": "simpleposter",
+  "version": "1.0.0",
+  "description": "Rest api written on TS, for simple poster spa.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ."
+  },
+  "author": "vielfrass",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "express": "^4.17.1"
+  }
+}
