@@ -39,66 +39,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var express_1 = __importDefault(require("express"));
-var crypto_1 = require("./modules/crypto");
-var sqlite_1 = require("./modules/sqlite");
-var user_1 = require("./modules/user");
-var task, complete;
-task = [];
-complete = [];
-function main() {
-    // Create a new express application instance
-    var app = (0, express_1["default"])();
-    var router = express_1["default"].Router();
-    // The port the express app will listen on
-    var port = 3001;
-    sqlite_1.DB.migrate();
-    // DB.register("kek");
-    //api
-    // определяем Router
-    var apiRouter = express_1["default"].Router();
-    // apiRouter.use("/d:id", function (request, response) {
-    //     response.send(` ${request.params.id}`);
-    // });
-    apiRouter.use("/createpost", function (request, response) {
-        response.json({ "method": "api" });
-    });
-    apiRouter.use("/deletepost", function (request, response) {
-        response.json({ "method": "api" });
-    });
-    apiRouter.use("/createuser", function (request, response) {
+exports.cryptographic = void 0;
+//import { DB } from "./sqlite"
+var bcrypt_1 = __importDefault(require("bcrypt"));
+var crypto = require("crypto");
+var salt = "2524rj43wi4";
+var cryptographic = /** @class */ (function () {
+    function cryptographic() {
+    }
+    cryptographic.hashPassword = function (password) {
         return __awaiter(this, void 0, void 0, function () {
-            var name, password, hash, userData;
+            var hash;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        name = request.body.name;
-                        if (sqlite_1.DB.checkRegister(name)) {
-                            response.json({ "status": "bad", "error": "user already created" });
-                        }
-                        password = request.body.password;
-                        return [4 /*yield*/, crypto_1.cryptographic.hashPassword(password)];
+                    case 0: return [4 /*yield*/, bcrypt_1["default"].hash(password, salt)];
                     case 1:
                         hash = _a.sent();
-                        userData = user_1.user.register(name, hash);
-                        response.json({ "status": "ok", "user": userData });
-                        return [2 /*return*/];
+                        return [2 /*return*/, hash];
                 }
             });
         });
-    });
-    apiRouter.use("/", function (request, response) {
-        response.json({ "method": "api" });
-    });
-    // сопотавляем роутер с конечной точкой "/api"
-    app.use("/api", apiRouter);
-    app.use('/', function (w, r) {
-        r.send("index");
-    });
-    // Serve the application at the given port
-    app.listen(port, function () {
-        // Success callback
-        console.log("Listening at http://localhost:" + port + "/");
-    });
-}
-main();
+    };
+    cryptographic.comparePasswordAndHash = function (password, hash) {
+        return __awaiter(this, void 0, void 0, function () {
+            var newHash;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, cryptographic.hashPassword(password)];
+                    case 1:
+                        newHash = _a.sent();
+                        return [2 /*return*/, (newHash == hash)];
+                }
+            });
+        });
+    };
+    cryptographic.generateSessionUUID = function () {
+        var uuid = crypto.randomBytes(20).toString('hex');
+        return uuid;
+    };
+    return cryptographic;
+}());
+exports.cryptographic = cryptographic;
