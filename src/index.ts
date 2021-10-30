@@ -3,9 +3,7 @@ import express from 'express'
 import { cryptographic } from './modules/crypto';
 import { DB } from "./modules/sqlite"
 import { user } from './modules/user';
-var task: string[], complete: string[];
-task = [];
-complete = [];
+
 function main() {
     // Create a new express application instance
     const app: express.Application = express();
@@ -13,14 +11,11 @@ function main() {
     // The port the express app will listen on
     const port: number = 3001;
     DB.migrate();
-    // DB.register("kek");
+
     //api
     // определяем Router
     const apiRouter = express.Router();
 
-    // apiRouter.use("/d:id", function (request, response) {
-    //     response.send(` ${request.params.id}`);
-    // });
     apiRouter.use("/createpost", function (request, response) {
         response.json({ "method": "api" });
     });
@@ -41,7 +36,7 @@ function main() {
     apiRouter.use("/", function (request, response) {
         response.json({ "method": "api" });
     });
-    // сопотавляем роутер с конечной точкой "/api"
+    // __/api
     app.use("/api", apiRouter);
 
     app.use('/', (w, r) => {
