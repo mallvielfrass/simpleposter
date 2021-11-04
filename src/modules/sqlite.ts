@@ -1,6 +1,14 @@
 var sqlite3 = require("sqlite3").verbose();
-var db = new sqlite3.Database("database.db");
+var db = new sqlite3.Database(checkDB());
+function checkDB(): string {//
 
+    if (process.env.NODE_ENV == "test") {
+        console.log(`>database in test mode`)
+        return ":memory:"
+    }
+    console.log(`>database in production mode`)
+    return "database.db"
+}
 import { UserRegister, UserSession } from './types'
 
 async function db_all(query: string): Promise<string[]> {
