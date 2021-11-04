@@ -53,9 +53,9 @@ export class DB {
     }
     static async checkRegister(name: string): Promise<boolean> {
         let rows = await db_all(`SELECT * FROM createdUser WHERE name = '${name}'`);
-        console.log(">createdUser:", rows)
+        console.log(`>check createdUser:[${rows}]  [${rows.length}] `)
 
-        return (0 < rows.length);
+        return (0 != rows.length);
     }
     static async addUserRegister(struct: UserRegister) {
         db_insert(`INSERT INTO createdUser(name,date,hash) VALUES('${struct.name}','${struct.date}','${struct.hash}')`)

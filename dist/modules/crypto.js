@@ -43,7 +43,8 @@ exports.cryptographic = void 0;
 //import { DB } from "./sqlite"
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var crypto = require("crypto");
-var salt = "2524rj43wi4";
+var salt = "1234";
+var saltRounds = 5;
 var cryptographic = /** @class */ (function () {
     function cryptographic() {
     }
@@ -52,7 +53,7 @@ var cryptographic = /** @class */ (function () {
             var hash;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, bcrypt_1["default"].hash(password, salt)];
+                    case 0: return [4 /*yield*/, bcrypt_1["default"].hash(password, saltRounds)];
                     case 1:
                         hash = _a.sent();
                         return [2 /*return*/, hash];

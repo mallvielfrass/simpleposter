@@ -1,8 +1,4 @@
 "use strict";
-// /**
-//  * SQLite module.
-//  * @module sqlite3
-//  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -79,21 +75,13 @@ function db_insert(query) {
                         if (err) {
                             return reject(err);
                         }
-                        // console.log("res:", res)
                         resolve(res);
                         return true;
-                        //  console.log("res:", res)
                     });
                 })];
         });
     });
 }
-// export interface UserRegister {
-//     name: string;
-//     date: number;
-//     //const currentTimeInMilliseconds = Date.now();
-//     //console.log(currentTimeInMilliseconds);
-// }
 var DB = /** @class */ (function () {
     function DB() {
     }
@@ -126,9 +114,6 @@ var DB = /** @class */ (function () {
                     case 0: return [4 /*yield*/, db_all("SELECT * FROM test")];
                     case 1:
                         rows = _a.sent();
-                        // let fruits: string[] = ['Apple', 'Orange', 'Banana'];
-                        // console.log("row:", rows)
-                        //console.log("q:", q)
                         return [2 /*return*/, rows];
                 }
             });
@@ -142,13 +127,8 @@ var DB = /** @class */ (function () {
                     case 0: return [4 /*yield*/, db_all("SELECT * FROM createdUser WHERE name = '" + name + "'")];
                     case 1:
                         rows = _a.sent();
-                        // let fruits: string[] = ['Apple', 'Orange', 'Banana'];
-                        console.log(">createdUser:", rows);
-                        //console.log("q:", q)
-                        if (0 < rows.length) {
-                            return [2 /*return*/, true];
-                        }
-                        return [2 /*return*/, false];
+                        console.log(">check createdUser:[" + rows + "]  [" + rows.length + "] ");
+                        return [2 /*return*/, (0 != rows.length)];
                 }
             });
         });
@@ -172,138 +152,3 @@ var DB = /** @class */ (function () {
     return DB;
 }());
 exports.DB = DB;
-// module.exports = {
-//     migrate: function (callback: any) {
-//         // db.all("SELECT * FROM todo", function (err: any, res: any) {
-//         //     callback(res);
-//         // });
-//         console.log("kek")
-//     },
-//     getTodoList: function (callback: any) {
-//         db.all("SELECT * FROM todo", function (err: any, res: any) {
-//             callback(res);
-//         });
-//     },
-//     getDoneList: function (callback: any) {
-//         db.all("SELECT * FROM done", function (err: any, res: any) {
-//             callback(res);
-//         });
-//     },
-//     addTask: function (taskName: string, callback: any) {
-//         db.run("INSERT INTO todo VALUES ($task)", {
-//             $task: taskName
-//         }, function () {
-//             callback();
-//         });
-//     },
-//     completeTask: function (taskName: string, callback: any) {
-//         // Delete the task from the todo list.
-//         db.run("DELETE FROM todo WHERE task=$task", {
-//             $task: taskName
-//         }, function () {
-//             db.run("INSERT INTO done VALUES ($task)", {
-//                 $task: taskName
-//             }, function () {
-//                 callback();
-//             });
-//         });
-//     },
-//     clearComplete: function (callback: any) {
-//         // Delete all cleared tasks.
-//         db.run("DELETE FROM done", function () {
-//             callback();
-//         });
-//     }
-// }
-// // Importing SQLite3 to our project.
-// var sqlite3 = require("sqlite3").verbose();
-// // Setting up a database for storing data.
-// let db = new sqlite3.Database('./database.db', (err) => {
-//     if (err) {
-//         console.error(err.message);
-//     }
-//     console.log('Connected to the chinook database.');
-// });
-// export class DB {
-//     const DB() { }
-//      function migrate() {
-//     db.serialize(function () {
-//         db.run("CREATE TABLE IF NOT EXISTS  $table(info TEXT)", {
-//             $table: "test"
-//         });
-//         console.log(">migrate BD");
-//     })
-// },
-// }
-// module.exports = {
-//     migrate: function () {
-//         db.serialize(function () {
-//             db.run("CREATE TABLE IF NOT EXISTS  $table(info TEXT)", {
-//                 $table: "test"
-//             });
-//             console.log(">migrate BD");
-//         })
-//     },
-//     // getTodoList: function (): string {
-//     //     let res = db.all("SELECT * FROM todo", function (err: any, res: any): any {
-//     //         return res;
-//     //     });
-//     //     return "l";
-//     // },
-//     addInfo: function (info: string) {
-//         db.run("INSERT INTO $table VALUES ($task)", {
-//             $table: "test",
-//             $task: info
-//         });
-//     },
-//     // addTask: function (taskName: string) {
-//     //     // Add a task to the todo list.
-//     //     db.run("INSERT INTO todo VALUES ($task)", {
-//     //         $task: taskName
-//     //     });
-//     // },
-//     // All of our functions go here.
-// };
-// /**
-//  * SQLite module.
-//  * @module sqlite3
-//  */
-// var sqlite3 = require("sqlite3").verbose();
-// var db = new sqlite3.Database("database.db");
-// module.exports = {
-//     getTodoList: function (callback: any) {
-//         db.all("SELECT * FROM todo", function (err: any, res: any) {
-//             callback(res);
-//         });
-//     },
-//     getDoneList: function (callback: any) {
-//         db.all("SELECT * FROM done", function (err: any, res: any) {
-//             callback(res);
-//         });
-//     },
-//     addTask: function (taskName: string, callback: any) {
-//         db.run("INSERT INTO todo VALUES ($task)", {
-//             $task: taskName
-//         }, function () {
-//             callback();
-//         });
-//     },
-//     completeTask: function (taskName: string, callback: any) {
-//         // Delete the task from the todo list.
-//         db.run("DELETE FROM todo WHERE task=$task", {
-//             $task: taskName
-//         }, function () {
-//             db.run("INSERT INTO done VALUES ($task)", {
-//                 $task: taskName
-//             }, function () {
-//                 callback();
-//             });
-//         });
-//     },
-//     clearComplete: function (callback: any) {
-//         // Delete all cleared tasks.
-//         db.run("DELETE FROM done", function () {
-//             callback();
-//         });
-//     }
-// }
