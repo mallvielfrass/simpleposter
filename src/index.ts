@@ -3,8 +3,47 @@ import express from 'express'
 import { cryptographic } from './modules/crypto';
 import { DB } from "./modules/sqlite"
 import { user } from './modules/user';
+const cors = require('cors');
 var bodyParser = require('body-parser')
+const getAppCookies = (req) => {
+    // We extract the raw cookies from the request headers
+    const rawCookies = req.headers.cookie.split('; ');
+    // rawCookies = ['myapp=secretcookie, 'analytics_cookie=beacon;']
 
+    const parsedCookies = {};
+    rawCookies.forEach(rawCookie => {
+        const parsedCookie = rawCookie.split('=');
+        // parsedCookie = ['myapp', 'secretcookie'], ['analytics_cookie', 'beacon']
+        parsedCookies[parsedCookie[0]] = parsedCookie[1];
+    });
+    return parsedCookies;
+};
+function loggerMiddleware(request: express.Request, response: express.Response, next) {
+    var middlewareAuth: Array<string> = ['/api/createpost'];
+    console.log(`middleware> ${request.method} ${request.path}`);
+    if (!(middlewareAuth.indexOf(request.path) > -1)) return next();
+
+    let cookieArray = getAppCookies(request);
+    console.log("cookie:", cookieArray);
+    if ((cookieArray["name"] == undefined) || (cookieArray["uuid"] == undefined) || (cookieArray["expired"] == undefined)) {
+        response.json({ "status": "bad", "error": "cookies empty" });
+        return
+    }
+    let name: string = cookieArray["name"];
+    let uuid: string = cookieArray["uuid"];
+
+    let expired: number = Number(cookieArray["expired"]);
+    if (isNaN(expired)) {
+        //  console.log('Not a Number');
+        response.json({ "status": "bad", "error": "cookie parsing broken" });
+        return
+    }
+    if (expired < Date.now()) {
+        response.json({ "status": "bad", "error": "token date expired" });
+        return
+    }
+    next();
+}
 // Create a new express application instance
 const app: express.Application = express();
 var router = express.Router();
@@ -16,7 +55,17 @@ DB.migrate();
 // определяем Router
 const apiRouter = express.Router();
 app.use(bodyParser.json())
+app.use(cors())
+app.use(loggerMiddleware)
 apiRouter.use("/createpost", function (request, response) {
+
+
+    if (request.body.post == undefined) {
+        response.json({ "status": "bad", "error": "post empty" });
+        return
+    }
+    let post: string = request.body.post;
+    //let res= await DB.addPost(name,post)
     response.json({ "method": "api" });
 });
 apiRouter.use("/deletepost", function (request, response) {
