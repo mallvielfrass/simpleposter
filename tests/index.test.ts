@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import app from '../src/index';
-import { DB } from '../src/modules/sqlite'
 import { agent as request } from 'supertest';
 
 
@@ -21,6 +20,30 @@ describe("/api", () => {
         expect(res.body).not.to.be.empty;
         expect(res.body).to.deep.equal({ "method": "api" });
 
+    });
+
+
+});
+describe("/api/createUser", () => {
+
+    it('/createUser POST GOOD', async function () {
+        // "status": "ok", "user": {
+        //     "name": userData.name,
+        //         "expired": userData.expiredDate,
+        //             "uuid": userData.uuid
+
+        // }
+        let name: string = "kek";
+        let password: string = "kek";
+        const res = await request(app)
+            .post('/api/createuser').send({ name: name, password: password });
+        expect(res.status).to.equal(200);
+
+        expect(res.body).not.to.be.empty;
+        expect(res.body.status).to.equal("ok");
+        expect(res.body.user.name).to.equal(name);
+        expect((Date.now() < res.body.user.expired) && (res.body.user.expired < (Date.now() + 2629800))).to.equal(true);
+        console.log(`test> User: ${JSON.stringify(res.body.user)}`)
     });
 
 
