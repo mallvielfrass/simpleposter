@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import app from '../src/index';
+import { DB } from '../src/modules/sqlite'
 import { agent as request } from 'supertest';
 
 
@@ -12,6 +13,7 @@ import { agent as request } from 'supertest';
 describe("/api", () => {
 
     it('/api POST GOOD', async function () {
+
         const res = await request(app)
             .post('/api').send();
         expect(res.status).to.equal(200);
